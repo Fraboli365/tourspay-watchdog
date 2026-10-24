@@ -1,1 +1,1 @@
-{"version":1,"codes":["failed"],"counts":{"stuck":0,"failed":1,"uncertain":0},"drillStarted":true,"delivery":{"signature":"failed","status":"uncertain"}}
+{"version":1,"codes":["failed"],"counts":{"stuck":0,"failed":1,"uncertain":0},"drillStarted":true,"delivery":{"signature":"failed","status":"confirmed"}}
