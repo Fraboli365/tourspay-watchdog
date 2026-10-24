@@ -13,6 +13,7 @@ on:
           - drill-down
           - drill-up
           - drill-cycle
+          - backup-drill-cycle
 permissions:
   contents: write
 concurrency:
@@ -34,6 +35,9 @@ jobs:
           MONITOR_REPOSITORY: ${{ vars.MONITOR_REPOSITORY }}
           MONITOR_URL: ${{ secrets.MONITOR_URL }}
           MONITOR_URL_SHA256: ${{ secrets.MONITOR_URL_SHA256 }}
+          BACKUP_MONITOR_URL: ${{ secrets.BACKUP_MONITOR_URL }}
+          BACKUP_MONITOR_URL_SHA256: ${{ secrets.BACKUP_MONITOR_URL_SHA256 }}
+          BACKUP_MONITOR_TOKEN: ${{ secrets.BACKUP_MONITOR_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MONITOR_MODE: ${{ inputs.mode || 'check' }}
