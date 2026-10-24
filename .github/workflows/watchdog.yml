@@ -14,6 +14,7 @@ on:
           - drill-up
           - drill-cycle
           - backup-drill-cycle
+          - access-mail-drill-cycle
 permissions:
   contents: write
 concurrency:
@@ -22,13 +23,13 @@ concurrency:
 jobs:
   monitor:
     runs-on: ubuntu-24.04
-    timeout-minutes: 2
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
       - name: Verify monitor logic
-        run: node --test tests/monitor.test.mjs
+        run: node --test tests/*.test.mjs
       - name: Check readiness and notify on transitions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,6 +39,9 @@ jobs:
           BACKUP_MONITOR_URL: ${{ secrets.BACKUP_MONITOR_URL }}
           BACKUP_MONITOR_URL_SHA256: ${{ secrets.BACKUP_MONITOR_URL_SHA256 }}
           BACKUP_MONITOR_TOKEN: ${{ secrets.BACKUP_MONITOR_TOKEN }}
+          ACCESS_MAIL_MONITOR_URL: ${{ secrets.ACCESS_MAIL_MONITOR_URL }}
+          ACCESS_MAIL_MONITOR_URL_SHA256: ${{ secrets.ACCESS_MAIL_MONITOR_URL_SHA256 }}
+          ACCESS_MAIL_MONITOR_TOKEN: ${{ secrets.ACCESS_MAIL_MONITOR_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MONITOR_MODE: ${{ inputs.mode || 'check' }}

@@ -7,3 +7,5 @@ State is persisted before sending each transition. An uncertain delivery is not 
 GitHub scheduled workflows can be delayed or skipped and do not provide a strict detection SLA. Availability and backup executor heartbeats use separate state files. Backup checks require a dedicated read-only bearer secret and validate freshness within 90 minutes. If the web is unreachable, only the availability channel alerts, to avoid redundant symptoms.
 
 A daily state-branch heartbeat records that checks are still running and maintains repository activity. Scheduled execution remains subject to GitHub availability, account status and workflow enablement.
+
+Access queue monitoring reads only aggregate stuck, failed and uncertain counters through a dedicated read-only secret. Category transitions and recovery use separate persistent state. Repeated categories do not repeat notifications. The access-mail-drill-cycle sends four labelled simulated transitions once; reruns are suppressed. No mail is sent and no queue jobs are modified.
