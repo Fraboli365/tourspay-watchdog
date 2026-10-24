@@ -1,1 +1,1 @@
-{"version":1,"status":"up","failures":0,"drillStarted":true,"delivery":{"event":"up","status":"uncertain","attemptedAt":"2026-10-24T05:15:15.268Z"}}
+{"version":1,"status":"up","failures":0,"drillStarted":true,"delivery":{"event":"up","status":"confirmed","attemptedAt":"2026-10-24T05:15:15.268Z"}}
