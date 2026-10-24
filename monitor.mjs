@@ -21,14 +21,22 @@ export async function check(state,healthy,{save,notify,now=()=>new Date().toISOS
  next.delivery={event,status:'uncertain',attemptedAt:now()};await save(next); // persist BEFORE external side effect
  await notify(event);next.delivery.status='confirmed';await save(next);return {state:next,notified:true};
 }
+export async function drillCycle(state,deps){
+ if(state.drillCompleted)return {state,duplicateSuppressed:true,notifications:0};
+ if(state.drillStarted||state.status!=='up')throw Error('Inspect incomplete drill before retrying');
+ state={...state,drillStarted:true};await deps.save(state);let notifications=0;
+ for(const healthy of [false,false,false,true,true]){const r=await check(state,healthy,deps);state=r.state;if(r.notified)notifications++;}
+ state={...state,drillCompleted:true};await deps.save(state);return {state,duplicateSuppressed:false,notifications};
+}
 async function run(env=process.env){
  const repository=env.GITHUB_REPOSITORY;if(!repository||repository!==env.MONITOR_REPOSITORY||!/^[-\w]+\/[-\w]+$/.test(repository)||!env.GITHUB_TOKEN)throw Error('Repository scope rejected');
- const mode=env.MONITOR_MODE||'check',drill=mode!=='check';if(!['check','drill-down','drill-up'].includes(mode)||(drill&&env.GITHUB_EVENT_NAME!=='workflow_dispatch'))throw Error('Mode rejected');
+ const mode=env.MONITOR_MODE||'check',drill=mode!=='check';if(!['check','drill-down','drill-up','drill-cycle'].includes(mode)||(drill&&env.GITHUB_EVENT_NAME!=='workflow_dispatch'))throw Error('Mode rejected');
  const path=drill?'drill.json':'live.json',base='https://api.github.com/repos/'+repository;
  async function github(method,suffix,body){try{const r=await fetch(base+suffix,{method,redirect:'error',signal:AbortSignal.timeout(12000),headers:{authorization:'Bearer '+env.GITHUB_TOKEN,accept:'application/vnd.github+json','content-type':'application/json'},body:body?JSON.stringify(body):undefined});if(!r.ok)throw Error();return await r.json();}catch{throw Error('Scoped state operation failed; no alert attempted or retried');}}
  let file=await github('GET','/contents/'+path+'?ref=monitor-state');let state=JSON.parse(Buffer.from(file.content,'base64').toString('utf8'));
  async function save(value){file=await github('PUT','/contents/'+path,{message:'Monitor state transition',branch:'monitor-state',sha:file.sha,content:Buffer.from(JSON.stringify(value)).toString('base64')}).then(j=>j.content);}
  const notify=event=>send(event,drill,env);
+ if(mode==='drill-cycle'){const r=await drillCycle(state,{save,notify});console.log(JSON.stringify({mode,status:r.state.status,notifications:r.notifications,duplicateSuppressed:r.duplicateSuppressed,financialOperations:0,emailsSent:0}));return;}
  let healthy;if(drill)healthy=mode==='drill-up';else{healthy=await probe(env.MONITOR_URL,env.MONITOR_URL_SHA256);if(!healthy){await new Promise(r=>setTimeout(r,5000));healthy=await probe(env.MONITOR_URL,env.MONITOR_URL_SHA256);}}
  // Two observations are required; drill-down exercises the same persisted transition path.
  if(!healthy&&state.status==='up'&&state.failures===0){const first=await check(state,false,{save,notify});state=first.state;}
