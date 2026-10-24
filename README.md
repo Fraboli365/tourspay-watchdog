@@ -5,3 +5,5 @@ Generic watchdog only. No application source, customer data, credentials or targ
 State is persisted before sending each transition. An uncertain delivery is not retried automatically. Inspect its state and Telegram before any manual remediation. Tests use an isolated drill state and clearly labelled notifications; the target service is never stopped.
 
 GitHub scheduled workflows can be delayed or skipped and do not provide a strict detection SLA. This monitors HTTP readiness, not internal backup executor liveness.
+
+A daily state-branch heartbeat records that checks are still running and maintains repository activity. Scheduled execution remains subject to GitHub availability, account status and workflow enablement.
