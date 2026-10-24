@@ -12,6 +12,7 @@ on:
           - check
           - drill-down
           - drill-up
+          - drill-cycle
 permissions:
   contents: write
 concurrency:
