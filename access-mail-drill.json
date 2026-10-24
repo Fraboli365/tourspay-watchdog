@@ -1,1 +1,1 @@
-{"version":1,"codes":["uncertain"],"counts":{"stuck":0,"failed":0,"uncertain":1},"drillStarted":true,"delivery":{"signature":"uncertain","status":"confirmed"}}
+{"version":1,"codes":[],"counts":{"stuck":0,"failed":0,"uncertain":0},"drillStarted":true,"delivery":{"signature":"","status":"uncertain"}}
