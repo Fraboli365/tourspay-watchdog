@@ -40,6 +40,6 @@ async function run(env=process.env){
  let healthy;if(drill)healthy=mode==='drill-up';else{healthy=await probe(env.MONITOR_URL,env.MONITOR_URL_SHA256);if(!healthy){await new Promise(r=>setTimeout(r,5000));healthy=await probe(env.MONITOR_URL,env.MONITOR_URL_SHA256);}}
  // Two observations are required; drill-down exercises the same persisted transition path.
  if(!healthy&&state.status==='up'&&state.failures===0){const first=await check(state,false,{save,notify});state=first.state;}
- const result=await check(state,healthy,{save,notify});console.log(JSON.stringify({mode,status:result.state.status,notified:result.notified,duplicateSuppressed:result.duplicateSuppressed||false,financialOperations:0,emailsSent:0}));
+ const result=await check(state,healthy,{save,notify});const now=new Date().toISOString();if(result.state.lastCheckedAt?.slice(0,10)!==now.slice(0,10)){await save({...result.state,lastCheckedAt:now});}console.log(JSON.stringify({mode,status:result.state.status,notified:result.notified,duplicateSuppressed:result.duplicateSuppressed||false,financialOperations:0,emailsSent:0}));
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)run().catch(()=>{console.error('External monitor failed; inspect its state before retrying. No secrets logged.');process.exitCode=1;});
