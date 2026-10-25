@@ -1,11 +1,13 @@
-# External availability watchdog
+# External readiness watchdog
 
-Generic watchdog only. No application source, customer data, credentials or target URLs belong in this repository. Telegram secrets and the target URL must be stored as repository secrets. Only the workflow token can update the separate monitor-state branch. Scheduled runs do not accept input and do not execute pull requests.
+Generic monitoring only. No application source, customer data or credentials belong in this repository. Tokens and destination addresses are repository secrets. Nonsecret custom-domain targets may use repository variables, with an explicit SHA-256 pin. Only the workflow token updates the separate monitor-state branch. Scheduled runs do not accept input or execute pull requests.
 
-State is persisted before sending each transition. An uncertain delivery is not retried automatically. Inspect its state and Telegram before any manual remediation. Tests use an isolated drill state and clearly labelled notifications; the target service is never stopped.
+Checks run approximately every ten minutes. GitHub schedules can be delayed or skipped and provide no strict detection SLA. A daily state-branch heartbeat records execution; it remains subject to GitHub availability, account status and workflow enablement.
 
-GitHub scheduled workflows can be delayed or skipped and do not provide a strict detection SLA. Availability and backup executor heartbeats use separate state files. Backup checks require a dedicated read-only bearer secret and validate freshness within 90 minutes. If the web is unreachable, only the availability channel alerts, to avoid redundant symptoms.
+Availability, backup executor freshness, access queue counters, archive health and optional custom-domain HTTPS use separate persistent state. If the primary web is unreachable, availability alerts first to avoid redundant symptoms. Archive monitoring reuses the existing aggregate-counter credential and pinned origin; it receives no storage, deployment or financial credentials. It detects stale capture or executors, capacity, failed cleanup, uncertain upload and delayed verification. Custom-domain monitoring validates normal HTTPS and readiness; it cannot issue certificates or modify hosting.
 
-A daily state-branch heartbeat records that checks are still running and maintains repository activity. Scheduled execution remains subject to GitHub availability, account status and workflow enablement.
+State persists before each notification. Repeated categories do not repeat alerts. An uncertain delivery is not retried blindly: inspect the saved state and destination before remediation. Alerts contain generic categories, without tenant or buyer data.
 
-Access queue monitoring reads only aggregate stuck, failed and uncertain counters through a dedicated read-only secret. Category transitions and recovery use separate persistent state. Repeated categories do not repeat notifications. The access-mail-drill-cycle sends four labelled simulated transitions once; reruns are suppressed. No mail is sent and no queue jobs are modified.
+Manual drill modes use isolated state and clearly labelled simulated notifications. They never stop the target service, send email or modify queues. The archive-drill-cycle sends one combined problem and one recovery once; reruns send zero messages. Access queue drills preserve their separate state. Normal checks only notify meaningful transitions.
+
+Run the local test suite with `node --test tests/*.test.mjs`. Assign an incident owner and escalation path separately; monitoring does not create a human on-call service.
