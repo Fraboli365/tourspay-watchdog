@@ -15,6 +15,7 @@ on:
           - drill-cycle
           - backup-drill-cycle
           - access-mail-drill-cycle
+          - archive-drill-cycle
 permissions:
   contents: write
 concurrency:
@@ -42,7 +43,10 @@ jobs:
           ACCESS_MAIL_MONITOR_URL: ${{ secrets.ACCESS_MAIL_MONITOR_URL }}
           ACCESS_MAIL_MONITOR_URL_SHA256: ${{ secrets.ACCESS_MAIL_MONITOR_URL_SHA256 }}
           ACCESS_MAIL_MONITOR_TOKEN: ${{ secrets.ACCESS_MAIL_MONITOR_TOKEN }}
+          CUSTOM_MONITOR_URL: ${{ vars.CUSTOM_MONITOR_URL }}
+          CUSTOM_MONITOR_URL_SHA256: ${{ vars.CUSTOM_MONITOR_URL_SHA256 }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MONITOR_MODE: ${{ inputs.mode || 'check' }}
         run: node monitor.mjs
+
