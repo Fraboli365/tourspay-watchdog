@@ -1,1 +1,1 @@
-{"version":1,"codes":["BACKUP_OVERDUE","EXECUTOR_STALE"],"drillStarted":true,"manualReceiptConfirmed":true,"delivery":{"signature":"BACKUP_OVERDUE|EXECUTOR_STALE","status":"confirmed"}}
+{"version":1,"codes":[],"drillStarted":true,"manualReceiptConfirmed":true,"delivery":{"signature":"","status":"uncertain"}}
