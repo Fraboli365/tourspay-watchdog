@@ -1,1 +1,1 @@
-{"version":1,"sequence":1,"counts":{"uncertain":1,"verified":2,"recovered":1},"delivery":{"event":"uncertain","status":"uncertain"}}
+{"version":1,"sequence":1,"counts":{"uncertain":1,"verified":2,"recovered":1},"delivery":{"event":"uncertain","status":"confirmed"}}
