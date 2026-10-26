@@ -8,7 +8,7 @@ on:
         description: Read-only health check or isolated simulated alert drill
         type: choice
         default: check
-        options: [check, drill]
+        options: [check, drill, diagnose]
 permissions:
   contents: write
 concurrency:
