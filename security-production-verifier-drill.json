@@ -1,1 +1,1 @@
-{"version":1,"status":"down","failures":2,"started":true,"delivery":{"status":"confirmed","event":"down"}}
+{"version":1,"status":"up","failures":0,"started":true,"delivery":{"status":"uncertain","event":"up"}}
