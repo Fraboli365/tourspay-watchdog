@@ -1,0 +1,31 @@
+name: Production synthetic transport alerts
+on:
+  schedule:
+    - cron: '11,31,51 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: production-transport-alerts-only
+  cancel-in-progress: false
+jobs:
+  monitor:
+    if: github.repository == 'Fraboli365/tourspay-watchdog'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - run: node --test transport-tests/*.test.mjs
+      - run: node production-transport-alerts.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SECURITY_WRITER_URL: ${{ secrets.SECURITY_WRITER_URL }}
+          SECURITY_WRITER_HASH: ${{ secrets.SECURITY_WRITER_HASH }}
+          SECURITY_WRITER_TOKEN: ${{ secrets.SECURITY_WRITER_TOKEN }}
+          SECURITY_VERIFIER_URL: ${{ secrets.SECURITY_VERIFIER_URL }}
+          SECURITY_VERIFIER_HASH: ${{ secrets.SECURITY_VERIFIER_HASH }}
+          SECURITY_VERIFIER_TOKEN: ${{ secrets.SECURITY_VERIFIER_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
