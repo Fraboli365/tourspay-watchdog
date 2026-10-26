@@ -1,1 +1,1 @@
-{"version":1,"codes":["BACKUP_FAILED"],"drillStarted":true,"delivery":{"signature":"BACKUP_FAILED","status":"uncertain"}}
+{"version":1,"codes":["BACKUP_FAILED"],"drillStarted":true,"manualReceiptConfirmed":true,"delivery":{"signature":"BACKUP_FAILED","status":"confirmed","confirmation":"human-receipt"}}
