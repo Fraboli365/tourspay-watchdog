@@ -1,1 +1,1 @@
-{"version":1,"status":"up","failures":1,"lastCheckedAt":"2026-10-27T00:45:16.263Z"}
+{"version":1,"status":"down","failures":2,"lastCheckedAt":"2026-10-27T00:45:16.263Z","delivery":{"event":"down","status":"uncertain","attemptedAt":"2026-10-27T05:43:58.459Z"}}
